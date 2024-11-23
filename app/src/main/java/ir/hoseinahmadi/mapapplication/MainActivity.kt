@@ -34,9 +34,11 @@ import com.google.maps.android.compose.MarkerComposable
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
+import dagger.hilt.android.AndroidEntryPoint
 import ir.hoseinahmadi.mapapplication.ui.screens.MainScreen
 import ir.hoseinahmadi.mapapplication.ui.theme.MapApplicationTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
