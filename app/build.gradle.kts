@@ -69,6 +69,12 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.gson)
 
+    //googleMaps
     implementation(libs.maps.compose)
+
+    // Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 
 }
