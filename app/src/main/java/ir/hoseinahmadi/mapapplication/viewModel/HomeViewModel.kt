@@ -14,8 +14,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: HomeRepository
+    private val repository: HomeRepository,
 ) : ViewModel() {
+
 
     private val _cityResponse: MutableStateFlow<NetworkResult<WeatherResponse>> =
         MutableStateFlow(NetworkResult.Loading)
@@ -26,3 +27,4 @@ class HomeViewModel @Inject constructor(
         }
     }
 }
+

@@ -6,13 +6,15 @@ import com.google.maps.android.compose.rememberMarkerState
 import ir.hoseinahmadi.mapapplication.data.model.Markers
 
 @Composable
-fun BaseMarkerItem(item:Markers){
+fun BaseMarkerItem(
+    item: Markers, onClick: () -> Unit,
+) {
     Marker(
         title = item.title,
         state = rememberMarkerState(position = item.latLng),
-        /*       onClick = {
-                   Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
-                   true
-               }*/
+        onClick = {
+            onClick()
+            true
+        },
     )
 }
