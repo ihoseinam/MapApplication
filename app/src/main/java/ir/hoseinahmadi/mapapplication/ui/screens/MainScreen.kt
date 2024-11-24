@@ -1,23 +1,47 @@
 package ir.hoseinahmadi.mapapplication.ui.screens
 
 import android.util.Log
-import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.google.android.gms.maps.LocationSource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.maps.android.compose.rememberMarkerState
+import ir.hoseinahmadi.mapapplication.data.apiCall.NetworkResult
 import ir.hoseinahmadi.mapapplication.data.model.Markers
+import ir.hoseinahmadi.mapapplication.ui.component.BaseMarkerItem
 import ir.hoseinahmadi.mapapplication.util.Constants
+import ir.hoseinahmadi.mapapplication.viewModel.HomeViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun MainScreen() {
+fun MainScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
+    LaunchedEffect(Unit) {
+        homeViewModel.getWeather("Tehran")
+        homeViewModel.cityResponse.collectLatest { state ->
+            when (state) {
+                is NetworkResult.Error -> {
+                    Log.i("1515","Error :${state.message}" )
+                }
+
+                NetworkResult.Loading -> {
+
+                }
+
+                is NetworkResult.Success -> {
+                    Log.i("1515", state.data?.main.toString())
+                }
+            }
+        }
+
+    }
 
     val markerList = listOf(
         Markers(
@@ -46,20 +70,19 @@ fun MainScreen() {
         position = CameraPosition.fromLatLngZoom(Constants.IranLatLng, 6f)
     }
     val context = LocalContext.current
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState,
-        onMapLoaded = { Log.i("1212","onMapLoaded") },
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        markerList.forEach {marks->
-            Marker(
-                title = marks.title,
-                state = rememberMarkerState(position =marks.latLng),
-         /*       onClick = {
-                    Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
-                    true
-                }*/
-            )
+        GoogleMap(
+            modifier = Modifier
+                .fillMaxSize(),
+            cameraPositionState = cameraPositionState,
+            onMapLoaded = { Log.i("1212", "onMapLoaded") },
+        ) {
+            markerList.forEach { marks ->
+                BaseMarkerItem(marks)
+            }
         }
     }
+
 }
